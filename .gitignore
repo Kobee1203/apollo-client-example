@@ -28,3 +28,7 @@ coverage
 *.sw?
 
 *.tsbuildinfo
+
+# Generated files
+/src/gql/
+/graphql.schema.json
