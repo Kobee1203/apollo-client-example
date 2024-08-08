@@ -26,6 +26,7 @@
     "@graphql-codegen/cli": "5.0.2",
     "@graphql-codegen/client-preset": "4.3.3",
     "@graphql-codegen/introspection": "4.0.3",
+    "@rollup/plugin-graphql": "^2.0.4",
     "@rushstack/eslint-patch": "^1.8.0",
     "@tsconfig/node20": "^20.1.4",
     "@types/jsdom": "^21.1.7",

@@ -1,29 +1,9 @@
 import { useQuery } from '@vue/apollo-composable'
-import gql from 'graphql-tag'
 import type { BooksQuery, BooksQueryVariables } from '@/gql/graphql'
+import BooksDocument from '@/graphql/documents/books.query.graphql'
 
 export const useBooksQuery = () => {
-  const query = gql`
-    query Books {
-      books {
-        id
-        title
-        author {
-          id
-          name
-          dateOfBirth
-          books {
-            id
-            title
-            publicationDate
-          }
-        }
-        publicationDate
-      }
-    }
-  `
-
-  const { result, loading, error } = useQuery<BooksQuery, BooksQueryVariables>(query)
+  const { result, loading, error } = useQuery<BooksQuery, BooksQueryVariables>(BooksDocument)
 
   return { result, loading, error }
 }
