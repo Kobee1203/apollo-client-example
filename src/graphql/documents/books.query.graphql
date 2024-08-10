@@ -6,12 +6,9 @@ query Books {
             id
             name
             dateOfBirth
-            books {
-                id
-                title
-                publicationDate
-            }
+            photoUrl
         }
         publicationDate
+        coverUrl
     }
 }
