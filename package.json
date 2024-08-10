@@ -20,6 +20,8 @@
     "@vue/apollo-composable": "^4.0.2",
     "graphql": "^16.9.0",
     "graphql-tag": "^2.12.6",
+    "primevue": "^4.0.4",
+    "tailwindcss-primeui": "^0.3.4",
     "vue": "^3.4.29"
   },
   "devDependencies": {
@@ -36,6 +38,7 @@
     "@vue/eslint-config-typescript": "^13.0.0",
     "@vue/test-utils": "^2.4.6",
     "@vue/tsconfig": "^0.5.1",
+    "autoprefixer": "^10.4.20",
     "eslint": "^8.57.0",
     "eslint-plugin-vue": "^9.23.0",
     "jsdom": "^24.1.0",
