@@ -1,28 +1,52 @@
 <script setup lang="ts">
-import { watch } from 'vue'
+import { ref, watch } from 'vue'
 import { useBooksQuery } from '@/composables/useBooksQuery'
 import Button from 'primevue/button'
 import DataView from 'primevue/dataview'
 import Skeleton from 'primevue/skeleton'
+import Message from 'primevue/message'
 
-const { result, loading, error } = useBooksQuery()
+const { result, loading, error, fetchMore } = useBooksQuery()
 
 watch(result, (value) => {
   console.log('books:', value)
 })
+
+const noMoreResults = ref(false)
+
+const onLoadMore = () => {
+  fetchMore({
+    variables: {
+      offset: result.value?.books.length
+    },
+    updateQuery: (previousResult, { fetchMoreResult }) => {
+      // No new books
+      if (!fetchMoreResult?.books.length) {
+        noMoreResults.value = true
+        return previousResult
+      }
+
+      // Concat previous books with new books
+      return {
+        ...previousResult,
+        books: [...previousResult.books, ...fetchMoreResult.books]
+      }
+    }
+  })
+}
 </script>
 
 <template>
   <main>
     <h1 class="text-5xl my-5">Books</h1>
     <div v-if="result?.books" class="card">
-      <DataView :value="result?.books" paginator :rows="5">
+      <DataView :value="result?.books">
         <template #list="slotProps">
           <div class="flex flex-col">
             <div v-for="(item, index) in slotProps.items" :key="item.id">
               <div
-                  class="flex flex-col sm:flex-row sm:items-center p-6 gap-4"
-                  :class="{ 'border-t border-surface-200 dark:border-surface-700': index !== 0 }"
+                class="flex flex-col sm:flex-row sm:items-center p-6 gap-4"
+                :class="{ 'border-t border-surface-200 dark:border-surface-700': index !== 0 }"
               >
                 <div class="sm:basis-40">
                   <img class="block xl:block mx-auto rounded w-full" :src="item.coverUrl" :alt="item.title" />
@@ -30,9 +54,9 @@ watch(result, (value) => {
                 <div class="sm:basis-80 self-stretch flex flex-col gap-6">
                   <div class="flex flex-row gap-2">
                     <img
-                        class="rounded-full w-10 h-10 object-cover"
-                        :src="item.author.photoUrl"
-                        :alt="item.author.name"
+                      class="rounded-full w-10 h-10 object-cover"
+                      :src="item.author.photoUrl"
+                      :alt="item.author.name"
                     />
                     <span class="font-medium text-surface-500 dark:text-surface-400 text-sm mb-2">
                       {{ item.author.name }}
@@ -46,6 +70,17 @@ watch(result, (value) => {
           </div>
         </template>
       </DataView>
+      <div class="flex justify-center">
+        <Message v-if="noMoreResults" severity="info">No more results</Message>
+        <Button
+          v-else
+          label="Show More"
+          severity="info"
+          @click="onLoadMore"
+          :loading="loading"
+          loading-icon="pi pi-spin pi-spinner"
+        />
+      </div>
     </div>
     <div v-if="loading" class="card">
       <DataView>
